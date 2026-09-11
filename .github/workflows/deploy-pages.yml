@@ -33,6 +33,19 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Require deployed API URL
+        env:
+          API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+        run: |
+          if [[ -z "$API_BASE_URL" ]]; then
+            echo "::error::VITE_API_BASE_URL is not configured. Deploy the FastAPI backend and add its public URL as a repository Actions variable before deploying Pages."
+            exit 1
+          fi
+          if [[ "$API_BASE_URL" == */ ]]; then
+            echo "::error::VITE_API_BASE_URL must not end with a slash."
+            exit 1
+          fi
+
       - name: Install frontend dependencies
         working-directory: frontend
         run: npm install --no-audit --no-fund
