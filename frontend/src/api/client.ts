@@ -1,7 +1,12 @@
 import type { ChatRequest, ChatResponse, ErrorEnvelope } from "../types/api";
 
 const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
-const apiBaseUrl = (configuredApiBaseUrl || "/api").replace(/\/$/, "");
+const normalizedApiOrigin = configuredApiBaseUrl?.replace(/\/$/, "");
+const apiBaseUrl = normalizedApiOrigin
+  ? normalizedApiOrigin.endsWith("/api")
+    ? normalizedApiOrigin
+    : `${normalizedApiOrigin}/api`
+  : "/api";
 
 export class ApiError extends Error {
   readonly code: ErrorEnvelope["error"]["code"] | "UNKNOWN_ERROR";
