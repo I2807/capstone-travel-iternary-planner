@@ -41,6 +41,12 @@ Configure the backend CORS setting to allow the Pages origin:
 CORS_ORIGINS=https://i2807.github.io
 ```
 
+### Deploy the backend on Render
+
+The repository includes `render.yaml` for a Docker-based Render web service. In Render, choose **New -> Blueprint**, connect this repository, and apply the blueprint. Set the `GOOGLE_API_KEY` secret when Render prompts for it. The service will expose a public URL such as `https://voyager-api.onrender.com`.
+
+After the Render service is healthy, set the GitHub Actions repository variable `VITE_API_BASE_URL` to that public URL, then rerun the Pages workflow. The deployed frontend will call the Render backend at `<backend-url>/api/chat`.
+
 Then push to `main` or run **Actions -> Deploy frontend to GitHub Pages -> Run workflow**. In **Settings -> Pages**, select **GitHub Actions** as the source if Pages has not been enabled for the repository yet.
 
 ## Validation
