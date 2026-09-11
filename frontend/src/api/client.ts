@@ -1,5 +1,8 @@
 import type { ChatRequest, ChatResponse, ErrorEnvelope } from "../types/api";
 
+const configuredApiBaseUrl = import.meta.env.VITE_API_BASE_URL?.trim();
+const apiBaseUrl = (configuredApiBaseUrl || "/api").replace(/\/$/, "");
+
 export class ApiError extends Error {
   readonly code: ErrorEnvelope["error"]["code"] | "UNKNOWN_ERROR";
   readonly requestId: string | null;
@@ -25,7 +28,7 @@ export async function sendChat(request: ChatRequest): Promise<ChatResponse> {
   let response: Response;
 
   try {
-    response = await fetch("/api/chat", {
+    response = await fetch(`${apiBaseUrl}/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
